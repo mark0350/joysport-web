@@ -18,7 +18,7 @@ class initiate_plugins
 	public function __construct()
 	{
 
-		new site_base();
+//		new site_base();
 
 	}
 }
