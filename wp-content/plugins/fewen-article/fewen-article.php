@@ -30,7 +30,7 @@ function view( $file, $args=[] ){
 
 function main_menu(){
 	add_menu_page( 'article', 'article', 'manage_options', 'article', 'show');
-	remove_menu_page('article');
+//	remove_menu_page('article');
 }
 
 function show(){

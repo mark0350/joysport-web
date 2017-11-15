@@ -1,0 +1,45 @@
+.fw-wrap {
+    position: fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background: #FFFFFF;
+    z-index: 999999;
+}
+
+.fw-main-container {
+    position: absolute;
+    width: 100%;
+
+}
+
+.fw-article {
+    height: 1000px;
+}
+
+.fw-title {
+    font-size: 2rem;
+    padding-bottom: 1.2rem;
+    text-align: center;
+
+
+}
+
+.fw-articles-statistic-container{
+    width: 100%;
+    position: sticky;
+    top: 0;
+    border: 1px;
+    background: red;
+    height: 200px;
+
+}
+
+.fw-articles-content-container{
+}
+
+body{
+    line-height: normal;
+}
+
