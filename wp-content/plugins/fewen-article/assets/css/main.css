@@ -43,3 +43,29 @@ body{
     line-height: normal;
 }
 
+#wpadminbar{
+    display: none;
+}
+
+#adminmenuwrap{
+    display: none;
+}
+
+#adminmenumain{
+    display: none;
+}
+
+.dropcap {
+    float: left;
+    font-size: 80px;
+    padding-right: 7px;
+    line-height: 72px;
+}
+
+i.mce-i-clear_before:before {
+    content: '\f340';
+}
+
+i.mce-i-clear_after:before {
+    content: '\f344';
+}

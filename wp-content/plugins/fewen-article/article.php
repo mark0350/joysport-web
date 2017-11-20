@@ -10,10 +10,22 @@
 
             </div>
             <div class="fw-articles-content-container">
-                    <div class="fw-article">
-                        <h2 class="fw-article-title"></h2>
+                <?php
+                wp_edit_posts_query();
 
-                    </div>
+                if( have_posts() ) :
+                    while ( have_posts() ) : the_post();
+                        view('single-article');
+
+                    endwhile;
+
+                else:
+
+
+                endif;
+
+
+                ?>
             </div>
 
 
