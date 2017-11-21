@@ -69,3 +69,35 @@ i.mce-i-clear_before:before {
 i.mce-i-clear_after:before {
     content: '\f344';
 }
+
+.wp-list-table .column-title button.toggle-row {
+    /*display:none;*/
+}
+
+.other{
+    float: right;
+}
+
+thead{
+    display: none;
+}
+
+tfoot{
+    display: none;
+}
+
+.tablenav .one-page .displaying-num{
+    display: none;
+}
+
+.tablenav .displaying-num {
+    display: none;
+}
+
+.tablenav.top .tablenav-pages {
+    display: none;
+}
+
+/*.subsubsub {*/
+    /*display: none;*/
+/*}*/

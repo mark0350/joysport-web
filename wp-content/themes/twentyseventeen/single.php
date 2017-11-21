@@ -20,11 +20,16 @@ get_header(); ?>
 			/* Start the Loop */
 			while ( have_posts() ) : the_post();
 
-			    echo get_post_view_count(get_the_ID());
                 // set view count
                 set_post_view_count(get_the_ID());
                 // set total view count
                 set_total_post_view_count(get_the_author_meta('ID'));
+                // set today total view count
+                set_today_post_view_count(get_the_author_meta('ID'));
+
+				echo "<br>this post: ".get_post_view_count(get_the_ID());
+				echo "<br>total view: ".get_total_post_view_count(get_the_author_meta('ID'));
+				echo "<br>today total view: ".get_today_post_view_count(get_the_author_meta('ID'));
 
 				get_template_part( 'template-parts/post/content', get_post_format() );
 

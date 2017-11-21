@@ -569,54 +569,55 @@ require get_parent_theme_file_path( '/inc/icon-functions.php' );
 function set_post_view_count($post_id){
 
 	$count_key = 'post_views_count';
-	$count = get_post_meta($post_id, $count_key, true);
-	if($count==''){
-		$count = 0;
-		delete_post_meta($post_id, $count_key);
-		add_post_meta($post_id, $count_key, '0');
-	}else{
-		$count++;
-		update_post_meta($post_id, $count_key, $count);
-	}
+	$count = (int)get_post_meta($post_id, $count_key, true);
+	update_post_meta($post_id, $count_key, ++$count);
+
 }
 
 function get_post_view_count($post_id){
 	$count_key = 'post_views_count';
-	$count = get_post_meta($post_id, $count_key, true);
-	if($count==''){
-		delete_post_meta($post_id, $count_key);
-		add_post_meta($post_id, $count_key, '0');
-		return "0 View";
-	}
-	return $count.' Views';
+	return (int)get_post_meta($post_id, $count_key, true);
 }
 
-function set_total_post_view_count($user_id){
-    $count_key = 'total_post_view_count';
-	$count = get_user_meta($user_id, $count_key, true);
-	if($count==''){
-		$count = 0;
-		delete_user_meta($user_id, $count_key);
-		add_user_meta($user_id, $count_key, '0');
-	}else{
-		$count++;
-		update_user_meta($user_id, $count_key, $count);
-	}
-}
-
-function get_total_post_view_count($user_id){
+function set_total_post_view_count( $user_id ) {
 	$count_key = 'total_post_views_count';
-	$count = get_user_meta($user_id, $count_key, true);
-	if($count==''){
-		delete_user_meta($user_id, $count_key);
-		add_user_meta($user_id, $count_key, '0');
-		return "0 View";
-	}
-	return $count.' Views';
+	$count     = (int)get_user_meta( $user_id, $count_key, true );
+	update_user_meta( $user_id, $count_key, ++$count );
+
+}
+
+function get_total_post_view_count( $user_id ) {
+	$count_key = 'total_post_views_count';
+
+	return (int) get_user_meta( $user_id, $count_key, true );
+}
+
+function set_today_post_view_count($user_id){
+    $count_key = 'today_post_views_count';
+    $default_count = [
+            'view' => 0,
+            'date' => current_time('Y-m-d')
+    ];
+
+    if( !$count = get_user_meta($user_id,$count_key,true) OR $count['date'] !== current_time('Y-m-d') ) {
+	   $count = $default_count;
+    }
+    $count['view']++;
+    update_user_meta($user_id, $count_key, $count);
 }
 
 function get_today_post_view_count($user_id){
     $count_key = 'today_post_views_count';
-    $count = get_user_meta($user_id,$count_key,true);
-    if($count['date'] )
+    $count = get_user_meta( $user_id,$count_key, true);
+
+    if($count){
+        if($count['date'] != current_time('Y-m-d')){
+            $count['date'] = current_time('Y-m-d');
+            $count['view'] = 0;
+        }
+        return (int)$count['view'];
+    }else{
+        return 0;
+    }
+
 }
