@@ -20,6 +20,12 @@ get_header(); ?>
 			/* Start the Loop */
 			while ( have_posts() ) : the_post();
 
+			    echo get_post_view_count(get_the_ID());
+                // set view count
+                set_post_view_count(get_the_ID());
+                // set total view count
+                set_total_post_view_count(get_the_author_meta('ID'));
+
 				get_template_part( 'template-parts/post/content', get_post_format() );
 
 				// If comments are open or we have at least one comment, load up the comment template.

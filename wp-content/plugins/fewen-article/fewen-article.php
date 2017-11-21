@@ -11,11 +11,10 @@ Domain Path: /lang/
 
 Copyright 2017 Joysport inc.
 */
-echo $d;
 add_action( 'admin_menu', 'main_menu');
 
 // 加载 css js
-add_action( 'admin_enqueue_scripts', 'admin_enqueue_scripts' );
+//add_action( 'admin_enqueue_scripts', 'admin_enqueue_scripts' );
 
 add_action( 'init', 'wptuts_buttons' );
 

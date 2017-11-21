@@ -565,3 +565,58 @@ require get_parent_theme_file_path( '/inc/customizer.php' );
  * SVG icons functions and filters.
  */
 require get_parent_theme_file_path( '/inc/icon-functions.php' );
+
+function set_post_view_count($post_id){
+
+	$count_key = 'post_views_count';
+	$count = get_post_meta($post_id, $count_key, true);
+	if($count==''){
+		$count = 0;
+		delete_post_meta($post_id, $count_key);
+		add_post_meta($post_id, $count_key, '0');
+	}else{
+		$count++;
+		update_post_meta($post_id, $count_key, $count);
+	}
+}
+
+function get_post_view_count($post_id){
+	$count_key = 'post_views_count';
+	$count = get_post_meta($post_id, $count_key, true);
+	if($count==''){
+		delete_post_meta($post_id, $count_key);
+		add_post_meta($post_id, $count_key, '0');
+		return "0 View";
+	}
+	return $count.' Views';
+}
+
+function set_total_post_view_count($user_id){
+    $count_key = 'total_post_view_count';
+	$count = get_user_meta($user_id, $count_key, true);
+	if($count==''){
+		$count = 0;
+		delete_user_meta($user_id, $count_key);
+		add_user_meta($user_id, $count_key, '0');
+	}else{
+		$count++;
+		update_user_meta($user_id, $count_key, $count);
+	}
+}
+
+function get_total_post_view_count($user_id){
+	$count_key = 'total_post_views_count';
+	$count = get_user_meta($user_id, $count_key, true);
+	if($count==''){
+		delete_user_meta($user_id, $count_key);
+		add_user_meta($user_id, $count_key, '0');
+		return "0 View";
+	}
+	return $count.' Views';
+}
+
+function get_today_post_view_count($user_id){
+    $count_key = 'today_post_views_count';
+    $count = get_user_meta($user_id,$count_key,true);
+    if($count['date'] )
+}
