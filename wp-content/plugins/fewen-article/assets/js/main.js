@@ -1,4 +1,4 @@
-(function() {
+(function($) {
     tinymce.create('tinymce.plugins.Wptuts', {
         /**
          * Initializes the plugin, this will be executed after the plugin has been created.
@@ -32,7 +32,7 @@
                 
                 
                 var rng2 = rng.cloneRange();
-                rng2.setStartBefore(jQuery(ed.getBody()).find('p:first').get(0));
+                rng2.setStartBefore(jQuery(ed.getBody()).find(':first').get(0));
                 rng2.setEndBefore(jQuery(ed.getBody()).find('span.marker').get(0));
                 ed.selection.setRng(rng2);
                 ed.selection.setContent('');
@@ -56,7 +56,11 @@
 
                 var rng2 = rng.cloneRange();
                 rng2.setStartAfter(jQuery(ed.getBody()).find('span.marker').get(0));
-                rng2.setEndAfter(jQuery(ed.getBody()).find('p:last').get(0));
+                if(jQuery(ed.getBody()).find(':last').is('p')){
+                    rng2.setEndAfter(jQuery(ed.getBody()).find('p:last').get(0));
+                }else{
+                    rng2.setEndAfter(jQuery(ed.getBody()).find(':last').get(0));
+                }
                 ed.selection.setRng(rng2);
                 ed.selection.setContent('');
 
@@ -100,4 +104,12 @@
 
     // Register plugin
     tinymce.PluginManager.add( 'wptuts', tinymce.plugins.Wptuts );
-})();
+
+    $(document).ready(function () {
+        $('.page-title-action').on('click',function (e) {
+            e.preventDefault();
+
+        })
+    })
+
+})(jQuery);

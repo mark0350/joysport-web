@@ -30,6 +30,8 @@ add_filter( 'edit_posts_per_page' , 'set_posts_per_page', 99, 2 );
 
 add_action('admin_init', 'import_capture_content', 99);
 
+add_filter('default_content', 'filter_post_content', 10, 2);
+
 
 function wptuts_buttons() {
 	add_filter( "mce_external_plugins", "wptuts_add_buttons" );
@@ -73,6 +75,14 @@ function admin_enqueue_scripts(){
 			'1.02',
 			'screen'
 		);
+
+	wp_enqueue_script(
+		'fewen-article',
+		plugins_url( 'fewen-article/assets/js/test.js'  ),
+		array('jquery'),
+		'1.00',
+		true
+	);
 
 
 }
@@ -147,7 +157,7 @@ function import_capture_content(){
               'Accept' => 'application/vnd.51Api.v2+json'
           ],
           'body' => [
-	          'url' => 'http://info.51.ca/news/canada/2017-11/599436.html',
+	          'url' => $_POST['url'],
           ]
 
         ];
@@ -157,6 +167,14 @@ function import_capture_content(){
             $result = json_decode($result, true);
 	        $capture_result = $result['data']['html'];
         }
-        $_REQUEST['content'] = $capture_result;
+        $_REQUEST['r51_capture_content'] = $capture_result;
     }
+}
+
+function filter_post_content( $post_content, $post ){
+	if(isset($_REQUEST['r51_capture_content'])){
+		return $_REQUEST['r51_capture_content'];
+	}
+
+	return $post_content;
 }
