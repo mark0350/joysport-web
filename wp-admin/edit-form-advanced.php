@@ -619,7 +619,9 @@ if ( post_type_supports($post_type, 'editor') ) {
 ?>
 <div id="postdivrich" class="postarea<?php if ( $_wp_editor_expand ) { echo ' wp-editor-expand'; } ?>">
 
-<?php wp_editor( $post->post_content, 'content', array(
+<?php
+//todo
+wp_editor( $post->post_content, 'content', array(
 	'_content_editor_dfw' => $_content_editor_dfw,
 	'drag_drop_upload' => true,
 	'tabfocus_elements' => 'content-html,save-post',

@@ -596,6 +596,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 		$post_title = esc_html( wp_unslash( $_REQUEST['post_title'] ));
 
 	$post_content = '';
+	//todo 数据库里post 这些是有带<p>这些标签的，看一看为什么倒入到编辑器就没了。怎么做到的
 	if ( !empty( $_REQUEST['content'] ) )
 		$post_content = esc_html( wp_unslash( $_REQUEST['content'] ));
 

@@ -163,6 +163,7 @@ case 'edit':
 	}
 
 	$title = $post_type_object->labels->edit_item;
+	//todo 在这里看一看post_content 变成什么样了
 	$post = get_post($post_id, OBJECT, 'edit');
 
 	if ( post_type_supports($post_type, 'comments') ) {

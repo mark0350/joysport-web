@@ -28,6 +28,8 @@ add_filter( 'manage_posts_columns' , 'manage_columns' );
 
 add_filter( 'edit_posts_per_page' , 'set_posts_per_page', 99, 2 );
 
+add_action('admin_init', 'import_capture_content', 99);
+
 
 function wptuts_buttons() {
 	add_filter( "mce_external_plugins", "wptuts_add_buttons" );
@@ -132,4 +134,29 @@ function manage_columns($columns){
 function set_posts_per_page($per_page, $post_type){
 	return 10;
 
+}
+
+function import_capture_content(){
+    global $pagenow;
+    if(in_array($pagenow, ['post-new.php'])){
+
+        $request_url = 'http://test.51home.ca/api/extract/article';
+        $args = [
+            'method' => 'POST',
+          'headers'  => [
+              'Accept' => 'application/vnd.51Api.v2+json'
+          ],
+          'body' => [
+	          'url' => 'http://info.51.ca/news/canada/2017-11/599436.html',
+          ]
+
+        ];
+        $result = wp_remote_post($request_url, $args);
+        if(wp_remote_retrieve_response_code($result) == 200){
+            $result = wp_remote_retrieve_body($result);
+            $result = json_decode($result, true);
+	        $capture_result = $result['data']['html'];
+        }
+        $_REQUEST['content'] = $capture_result;
+    }
 }
