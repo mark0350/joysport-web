@@ -1,7 +1,9 @@
 <?php ?>
-<article>
-	<dd>
-		<?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
-	</dd>
-
-</article>
+<div class="wrap wpclubmanager">
+    <h1><?php _e('WP Club Manager Settings'); ?></h1>
+    <form method="post" id="mainform" action="" enctype="multipart/form-data">
+        <label for="url"></label>
+        <input id="url" name="url">
+        <button type="submit">Submit</button>
+    </form>
+</div>

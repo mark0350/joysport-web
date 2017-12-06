@@ -2,36 +2,35 @@
 /*
 Plugin Name: Fewen Article
 Plugin URI: http://joysport.club/
-Description: Fewen Article is a plugin that can capture articles.
+Description: Fewen Article is a plugin that can capture articles from url and edit the captured article like a breeze.
 Version: 1.0.0
-Author: fewen
-Author URI: http://joysport.club/
+Author: Mark He
+Author URI: http://markhe.me/
 Text Domain: fewen-article
 Domain Path: /lang/
 
-Copyright 2017 Joysport inc.
+Copyright 2017 Mark He.
 */
-add_action( 'admin_menu', 'main_menu');
 
-// 加载 css js
-add_action( 'admin_enqueue_scripts', 'admin_enqueue_scripts' );
+add_action( 'admin_menu', 'admin_menu' , 5 );
+
 
 add_action( 'init', 'wptuts_buttons' );
-
-add_action( 'views_edit-post', 'app_views' );
-
-add_action('post_row_actions', 'change_row_action', 10 ,2);
-
-add_filter( 'bulk_actions-' . 'edit-post', '__return_empty_array' );
-
-add_filter( 'manage_posts_columns' , 'manage_columns' );
-
-add_filter( 'edit_posts_per_page' , 'set_posts_per_page', 99, 2 );
 
 add_action('admin_init', 'import_capture_content', 99);
 
 add_filter('default_content', 'filter_post_content', 10, 2);
+add_filter('default_title', 'filter_post_title', 10, 2);
 
+function admin_menu(){
+// MLS 房源
+    add_submenu_page( 'edit.php', __( 'Capture Post' ), __( 'Capture Post' ), 'manage_options', 'post-capture', 'display_post_capture');
+
+}
+
+function display_post_capture(){
+   view('single-article');
+}
 
 function wptuts_buttons() {
 	add_filter( "mce_external_plugins", "wptuts_add_buttons" );
@@ -166,8 +165,11 @@ function import_capture_content(){
             $result = wp_remote_retrieve_body($result);
             $result = json_decode($result, true);
 	        $capture_result = $result['data']['html'];
+	        $capture_title = $result['data']['title'];
+
         }
         $_REQUEST['r51_capture_content'] = $capture_result;
+        $_REQUEST['r51_capture_title'] = $capture_title;
     }
 }
 
@@ -177,4 +179,12 @@ function filter_post_content( $post_content, $post ){
 	}
 
 	return $post_content;
+}
+
+function filter_post_title( $post_title, $post ){
+	if(isset($_REQUEST['r51_capture_title'])){
+		return $_REQUEST['r51_capture_title'];
+	}
+
+	return $post_title;
 }
