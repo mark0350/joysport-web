@@ -1,9 +1,8 @@
 <?php ?>
-<div class="wrap wpclubmanager">
-    <h1><?php _e('WP Club Manager Settings'); ?></h1>
-    <form method="post" id="mainform" action="" enctype="multipart/form-data">
-        <label for="url"></label>
+<div class="wrap">
+    <h1><?php _e('Capture Post'); ?></h1>
+        <label for="url">URL</label>
         <input id="url" name="url">
-        <button type="submit">Submit</button>
-    </form>
+        <button>Load</button>
+        <button>Edit</button>
 </div>
