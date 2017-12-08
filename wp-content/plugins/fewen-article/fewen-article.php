@@ -72,7 +72,7 @@ final class Fewen_Article{
         <?php
 
         wp_enqueue_script('fw-main', Fewen_Article::$path . '/assets/js/fw-main.js', array('jquery'),
-            '1.02', true);
+            '1.05', true);
         return $context . ' ' . $html;
     }
 
@@ -183,6 +183,7 @@ final class Fewen_Article{
 			$context = stream_context_create( $pots );
 			$content = @file_get_contents( $url, false, $context );
 			$data = $content ? $content : false;
+			error_log($data);
 		}
 		return $data ? $this->my_encoding( $content, 'utf-8' ) : false;
 	}

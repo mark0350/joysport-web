@@ -1,25 +1,28 @@
 (function ($) {
     $(document).ready(function () {
 
-        $('#wpwrap').append(
-            '<div id="fw-load-article-modal-background">\n' +
-            '        </div>\n' +
-            '        <div id="fw-load-article-modal" >\n' +
-            '            <p>\n' +
-            '                <label for="url">URL</label>\n' +
-            '                <input id="url" name="url"/>\n' +
-            '            </p>\n' +
-            '            <p>\n' +
-            '                <input type="button" id="fw-insert-article" class="button-primary" value="Insert" />\n' +
-            '                <input type="button" id="fw-replace-article" class="button-primary" value="Replace"/>\n' +
-            '            </p>\n' +
-            '        </div>'
+        var captureModal = new FewenModal(
+            {
+                content :
+                        '<p>'+
+                            '<label for="url">URL</label>' +
+                            '<input id="url" name="url"/>' +
+                        '</p>'+
+                        '<p>' +
+                            '<input type="button" id="fw-insert-article" class="button-primary" value="Insert" />'+
+                            '<input type="button" id="fw-replace-article" class="button-primary" value="Replace"/>'+
+                        '</p>',
+
+                close : true,
+
+            }
+
         );
 
+        $('.fw-insert-article').click(function () {
+            captureModal.open();
+        });
 
-        $('.fw-insert-article,#fw-load-article-modal-background').click(function (e) {
-            $('#fw-load-article-modal-background, #fw-load-article-modal').toggleClass('active');
-        })
 
         $('#fw-insert-article').click(function (e) {
 
@@ -34,6 +37,8 @@
                 }
             })
         })
+
+
     });
 
 
