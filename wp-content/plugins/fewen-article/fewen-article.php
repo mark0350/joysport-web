@@ -18,6 +18,8 @@ final class Fewen_Article{
 
     public static $path;
 
+    public static $dir;
+
     public static function get_the_only_instance(){
         if(is_null(self::$instance)){
             self::$instance = new self();
@@ -28,11 +30,17 @@ final class Fewen_Article{
 
     public function __construct()
     {
+
+
         add_filter( 'media_buttons_context', array( $this, 'insert_form_tinymce_buttons' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_script') );
 
-        self::$path = __DIR__;
+        add_action('wp_ajax_capture_article', array($this, 'ajax_capture_article'));
+
+        self::$path = rtrim(plugin_dir_url( __FILE__ ), '/');
+
+        self::$dir = rtrim(plugin_dir_path(__FILE__), '/');
 
     }
 
@@ -61,26 +69,137 @@ final class Fewen_Article{
         </style>';
         $html .= '<a href="#" class="button-secondary fw-insert-article"><span class="fw-insert-article dashicons dashicons-feedback"></span> ' . __( 'Add Article') . '</a>';
         ?>
-        <div id="fw-load-article-modal-background" style="display: none;">
-            <div id="fw-load-article-modal" style="display:none;">
-                <p>
-                    <label for="url">URL</label>
-                    <input id="url" name="url"/>
-                </p>
-                <p>
-                    <input type="button" id="fw-insert-article" class="button-primary" value="Insert" />
-                    <input type="button" id="fw-replace-article" class="button-primary" value="Replace"/>
-                </p>
-            </div>
-
-        </div>
-
         <?php
 
-        wp_enqueue_script('fw-main', Fewen_Article::path . 'asset/js/fw-main.js', array('jQuery'),
-            '1.00', true);
+        wp_enqueue_script('fw-main', Fewen_Article::$path . '/assets/js/fw-main.js', array('jquery'),
+            '1.02', true);
         return $context . ' ' . $html;
     }
+
+    public function ajax_capture_article(){
+        $url = $_REQUEST['for_url'];
+        $article = $this->fetch_article($url);
+        wp_send_json(['article'=>$article]);
+    }
+
+    public function fetch_article($url){
+        include_once (self::$dir . '/simple_html_dom.php');
+        return $this->getHTML($url);
+    }
+
+	public function getHTML($url)
+	{
+		$html = $this->get_contents($url);
+		$html_copy = str_get_html($html);
+		$url_parse = parse_url($url);
+
+		$html_text = "";
+		$div_class = '';
+		if($url_parse['host'] == "info.51.ca")
+		{
+			if(strpos($url, "/m/") !== false)
+			{
+				$div_class = 'div[class=arcbody]';
+			}else
+			{
+				$div_class = 'div[class=article-content clearfix]';
+			}
+			foreach($html_copy->find($div_class) as $element) {
+				foreach($element->find('img') as $img) {
+					$img->src = $url_parse['scheme'].'://'.$url_parse['host'].$img->src;
+				}
+				$html_text = $element->innertext;
+			}
+		}
+        elseif ($url_parse['host'] == "news.yorkbbs.ca")
+		{
+			foreach($html_copy->find('div[class=article-main]') as $element) {
+				$html_text = $element->innertext;
+			}
+		}
+        elseif ($url_parse['host'] == "mp.weixin.qq.com")
+		{
+			foreach($html_copy->find('div[class=rich_media_content]') as $element) {
+				$html_text = $element->innertext;
+			}
+		}
+		else
+		{
+			$class_name_array = [];
+			$number = 0;
+			foreach($html_copy->find('p') as $p) {
+				$attr = $p->parent()->attr;
+				if (array_key_exists("class",$attr))
+				{
+					if (array_key_exists($attr["class"],$class_name_array))
+					{
+						$class_name_array[$attr["class"]] ++;
+					}else
+					{
+						$class_name_array[$attr["class"]] = 1;
+					}
+				}
+			}
+			foreach($class_name_array as $key => $value) {
+				if($value > $number)
+				{
+					$number = $value;
+					$div_class = $key;
+				}
+			}
+			foreach($html_copy->find('div[class='.$div_class.']') as $element) {
+				$html_text = $element->innertext;
+				break;
+			}
+		}
+		return str_replace("\t","",$html_text);
+	}
+	/**
+	 * 请求数据
+	 *
+	 * @param $url
+	 * @param $timeout
+	 * @return string
+	 */
+	function get_contents($url, $timeout = 20)
+	{
+		if( function_exists('curl_init') ){
+			$ch = curl_init();
+			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_HEADER, false );
+			curl_setopt( $ch, CURLOPT_TIMEOUT, $timeout );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+			$content = curl_exec( $ch );
+			curl_close( $ch );
+			$data = $content ? $content : false;
+		} else {
+			//利用了stream_context_create()设置超时时间:
+			$pots = array(
+				'http' => array(
+					'timeout' => $timeout
+				)
+			);
+			$context = stream_context_create( $pots );
+			$content = @file_get_contents( $url, false, $context );
+			$data = $content ? $content : false;
+		}
+		return $data ? $this->my_encoding( $content, 'utf-8' ) : false;
+	}
+
+	/**
+	 * 页面内容并自动转码
+	 * my_encoding()自定义函数
+	 * $data 为 curl_exec() 或 file_get_contents() 所获得的页面内容
+	 * $to 需要转成的编码
+	 */
+	function my_encoding( $data, $to )
+	{
+		$encode_arr = array('UTF-8','ASCII','GBK','GB2312','BIG5','JIS','eucjp-win','sjis-win','EUC-JP');
+		$encoded = mb_detect_encoding($data, $encode_arr);
+		$data = mb_convert_encoding($data,$to,$encoded);
+		return $data;
+	}
 }
 
 function Fewen_Article(){

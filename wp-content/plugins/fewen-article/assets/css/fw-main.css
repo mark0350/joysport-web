@@ -5,12 +5,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: white;
-    opacity: .50;
-    -webkit-opacity: .5;
-    -moz-opacity: .5;
+    opacity: 1;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
     filter: alpha(opacity=50);
-    z-index: 1000;
+    z-index: 9999;
+    background: #000;
+    background-color: rgba(0, 0, 0, .6)
 }
 
 #fw-load-article-modal {
@@ -29,10 +30,10 @@
     position: absolute;
     top: 50%;
     width: 320px;
-    z-index: 1000;
+    z-index: 10000;
 }
 
-#modal-background.active, #modal-content.active {
+#fw-load-article-modal-background.active, #fw-load-article-modal.active {
     display: block;
 }
 
