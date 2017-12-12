@@ -45,8 +45,12 @@ final class Fewen_Article{
     }
 
     public function admin_enqueue_script(){
-        wp_enqueue_style('fw-main-style', Fewen_Article::$path . '/assets/css/fw-main.css', array(), '1.00', 'screen');
+
+        wp_enqueue_style('fw-main-style', Fewen_Article::$path . '/assets/css/fw-main.css', array(), '1.01', 'screen');
+        wp_enqueue_script('fewen-modal', Fewen_Article::$path . '/assets/js/fewen-modal.js', array(), '1.05', true);
     }
+
+
 
     public function insert_form_tinymce_buttons($context){
         global $pagenow;
@@ -72,7 +76,9 @@ final class Fewen_Article{
         <?php
 
         wp_enqueue_script('fw-main', Fewen_Article::$path . '/assets/js/fw-main.js', array('jquery'),
-            '1.05', true);
+            '1.09', true);
+
+
         return $context . ' ' . $html;
     }
 
