@@ -133,4 +133,12 @@ i.mce-i-clear_after:before {
     content: '\f344';
 }
 
+.scotch-content .mkac-notice {
+    color: red;
+}
+
+.mkac-input {
+    width: 100%;
+}
+
 

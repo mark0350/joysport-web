@@ -47,12 +47,17 @@ final class MK_Article_Crawler {
 
 	public function admin_enqueue_script() {
 
-		wp_enqueue_style( 'mkac-main-style', MK_Article_Crawler::$path . '/assets/css/mkac-main.css', array(), '1.01', 'screen' );
+		wp_enqueue_style( 'mkac-main-style', MK_Article_Crawler::$path . '/assets/css/mkac-main.css', array(), '1.02', 'screen' );
 		wp_enqueue_script( 'mkac-modal', MK_Article_Crawler::$path . '/assets/js/mkac-modal.js', array(), '1.05', true );
 	}
 
-
-	public function insert_form_tinymce_buttons( $context ) {
+    /**
+	 * add insert captured article button to post-new and post pages
+	 *
+     * @param $context
+     * @return string
+     */
+    public function insert_form_tinymce_buttons( $context ) {
 		global $pagenow;
 
 		if ( 'post.php' != $pagenow && 'post-new.php' != $pagenow ) {
@@ -81,19 +86,59 @@ final class MK_Article_Crawler {
 		return $context . ' ' . $html;
 	}
 
-	public function ajax_capture_article() {
-		$url     = $_REQUEST['for_url'];
-		$article = $this->fetch_article( $url );
-		wp_send_json( [ 'article' => $article ] );
+    /**
+	 * todo wpnonce
+     * ajax api to capture article
+     */
+    public function ajax_capture_article() {
+
+		$this->validata_parameters();
+		$article = $this->capture_article( $_REQUEST['mkac_url'] );
+		if(is_wp_error($article)){
+			wp_send_json_error($article);
+		}
+		wp_send_json_success( [ 'article' => $article ] );
 	}
 
-	public function fetch_article( $url ) {
-		include_once( self::$dir . '/libs/simple_html_dom.php' );
+    /**
+	 * validate parameters to article capture
+	 *
+     * @return bool
+     */
+    private function validata_parameters(){
 
-		return $this->getHTML( $url );
+		$result = array();
+		do{
+			if(!isset($_REQUEST['mkac_url'])){
+				$result[] = array('message' => 'url is required');
+				break;
+			}
+			if(!wp_http_validate_url(trim($_REQUEST['mkac_url']))){
+				$result[] = array('message' => 'Invalid url');
+				break;
+			}
+			return true;
+		}while(false);
+
+		wp_send_json_error($result);
 	}
 
-	public function mkac_editor_buttons() {
+    /**
+	 * todo 是不是要替换http 请求方法，获取失败 try ?
+	 *
+     * @param $url
+     * @return mixed
+     */
+    public function capture_article( $url )
+    {
+        include_once( self::$dir . '/libs/simple_html_dom.php' );
+        return $this->getHTML( $url );
+	}
+
+    /**
+     * customize tinymce editor
+     */
+    public function mkac_editor_buttons() {
 		// 给 tinymce 编辑器增加插件
 		add_filter( "mce_external_plugins",
 			[ $this, 'mkac_editor_add_buttons' ] );
@@ -103,7 +148,7 @@ final class MK_Article_Crawler {
 	}
 
 	/**
-	 * 给tinymce 编辑器增加插件
+	 * add tinymce editor plugin
 	 *
 	 * @param $plugin_array
 	 *
@@ -117,7 +162,7 @@ final class MK_Article_Crawler {
 	}
 
 	/**
-	 * 给tinymce 编辑器增加两个按钮
+	 * add two buttons to mce editor
 	 *
 	 * @param $buttons
 	 *
