@@ -2,7 +2,7 @@
 
     $(document).ready(function () {
 
-        var captureModal = new FewenModal(
+        var captureModal = new MKACModal(
             {
                 content :
                         '<p>'+
@@ -10,18 +10,18 @@
                             '<input id="url" name="url"/>' +
                         '</p>'+
                         '<p>' +
-                            '<input type="button" id="fw-insert-article" class="button-primary" value="Insert" />'+
+                            '<input type="button" id="mkac-insert-article" class="button-primary" value="Insert" />'+
                         '</p>',
 
                 close : true,
-                title : 'Enter Url',
+                title : 'Enter dUrl',
                 onOpen: insertEvent
 
             }
 
         );
 
-        $('.fw-insert-article').click(function () {
+        $('.mkac-insert-article').click(function () {
             captureModal.open();
         });
 
@@ -29,7 +29,7 @@
 
 
         function insertEvent(){
-            $('#fw-insert-article').click(function (e) {
+            $('#mkac-insert-article').click(function (e) {
 
                 $.ajax({
                     method: "POST",

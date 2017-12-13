@@ -1,42 +1,3 @@
-#fw-load-article-modal-background {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
-    filter: alpha(opacity=50);
-    z-index: 9999;
-    background: #000;
-    background-color: rgba(0, 0, 0, .6)
-}
-
-#fw-load-article-modal {
-    background-color: white;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    box-shadow: 0 0 20px 0 #222;
-    -webkit-box-shadow: 0 0 20px 0 #222;
-    -moz-box-shadow: 0 0 20px 0 #222;
-    display: none;
-    height: 240px;
-    left: 50%;
-    margin: -120px 0 0 -160px;
-    padding: 10px;
-    position: absolute;
-    top: 50%;
-    width: 320px;
-    z-index: 10000;
-}
-
-#fw-load-article-modal-background.active, #fw-load-article-modal.active {
-    display: block;
-}
-
 /* Modal Base CSS */
 .scotch-overlay
 {
@@ -148,6 +109,28 @@
     background: #f4f5f6;
     border-bottom: 1px solid #ddd;
     text-shadow: 0 1px 0 #fff;
+}
+
+i.mce-i-clear_before:before {
+    content: "\f340";
+    font: 400 20px/1 dashicons;
+    padding: 0 2px 0 0;
+    vertical-align: top;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-left: -2px;
+}
+
+i.mce-i-clear_after:before {
+    font: 400 20px/1 dashicons;
+    padding: 0 2px 0 0;
+    vertical-align: top;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-left: -2px;
+    content: '\f344';
 }
 
 

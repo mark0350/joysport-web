@@ -1,5 +1,5 @@
 (function($) {
-    tinymce.create('tinymce.plugins.Wptuts', {
+    tinymce.create('tinymce.plugins.mkac_editor', {
         /**
          * Initializes the plugin, this will be executed after the plugin has been created.
          * This call is done before the editor instance has finished it's initialization so use the onInit event
@@ -12,47 +12,37 @@
             ed.addButton('clear_before', {
                 title : 'Clear Before',
                 cmd : 'clearbefore',
-                // image : url + '/clearbefore.png'
             });
 
             ed.addButton('clear_after', {
                 title : 'Clear After',
                 cmd : 'clearafter',
-                // image : url + '/clearbefore.png'
             });
 
             ed.addCommand('clearbefore', function() {
 
-
                 ed.execCommand('mceInsertContent', false,'<span class="marker">\ufeff</span>');
-
 
                 // 记录最初的选择用来操作后恢复
                 var rng = ed.selection.getRng(1);
-                
-                
+
                 var rng2 = rng.cloneRange();
                 rng2.setStartBefore(jQuery(ed.getBody()).find(':first').get(0));
                 rng2.setEndBefore(jQuery(ed.getBody()).find('span.marker').get(0));
                 ed.selection.setRng(rng2);
                 ed.selection.setContent('');
 
-
                 jQuery(ed.getBody()).find('span.marker').remove();
                 ed.selection.setRng(rng);
 
-
-
             });
-            
+
             ed.addCommand('clearafter', function () {
 
                 ed.execCommand('mceInsertContent', false,'<span class="marker">\ufeff</span>');
 
-
                 // 记录最初的选择用来操作后恢复
                 var rng = ed.selection.getRng(1);
-
 
                 var rng2 = rng.cloneRange();
                 rng2.setStartAfter(jQuery(ed.getBody()).find('span.marker').get(0));
@@ -93,9 +83,9 @@
          */
         getInfo : function() {
             return {
-                longname : 'Wptuts Buttons',
-                author : 'Lee',
-                authorurl : 'http://wp.tutsplus.com/author/leepham',
+                longname : 'MKAC Buttons',
+                author : 'Mark He',
+                authorurl : 'markhe.me',
                 infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/example',
                 version : "0.1"
             };
@@ -103,13 +93,7 @@
     });
 
     // Register plugin
-    tinymce.PluginManager.add( 'wptuts', tinymce.plugins.Wptuts );
+    tinymce.PluginManager.add( 'mkac_editor', tinymce.plugins.mkac_editor );
 
-    $(document).ready(function () {
-        $('.page-title-action').on('click',function (e) {
-            e.preventDefault();
-
-        })
-    })
 
 })(jQuery);

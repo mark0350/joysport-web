@@ -1,6 +1,6 @@
 (function () {
     
-    this.FewenModal = function () {
+    this.MKACModal = function () {
 
         this.closeButton = null;
         this.modal = null;
@@ -27,7 +27,7 @@
 
     }
 
-    FewenModal.prototype.open = function () {
+    MKACModal.prototype.open = function () {
         buildout.call(this);
 
         initEvents.call(this);
@@ -137,7 +137,7 @@
 
     // Public Methods
 
-    FewenModal.prototype.close = function() {
+    MKACModal.prototype.close = function() {
         var _ = this;
         this.modal.className = this.modal.className.replace(" scotch-open", "");
         this.overlay.className = this.overlay.className.replace(" scotch-open",
